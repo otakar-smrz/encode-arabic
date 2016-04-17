@@ -1,0 +1,270 @@
+\documentclass[10pt,a4paper]{article}
+
+\usepackage{hyperref}
+\usepackage{listings}
+
+\usepackage{arabtex}
+\usepackage{acolor}
+
+\newcommand{\sty}[1]{\textsf{#1.sty}}
+\newcommand{\hrefurl}[2]{\href{#1}{\nolinkurl{#2}}}
+
+\lstset{language=[LaTeX]TeX,
+        basicstyle=\renewcommand{\baselinestretch}{0.95}\ttfamily\small,
+        flexiblecolumns=true,
+        keepspaces=true,
+        texcs={acoloron,noacolor,acolorlet,acolor,a@color,color,colorlet},
+        texcsstyle=\color{purple},
+        commentstyle={},
+        emph={everything,
+              letters,
+              omissibles,
+              tatwil,
+              others,
+              isolated,
+              initial,
+              medial,
+              final,
+              diacritics,
+              hamzamadda,
+              vowelmarks,
+              emptymarks,
+              shadda,
+              fatha,
+              kasra,
+              damma,
+              quran,
+              ammad,
+              zwarakay,
+              bars,
+              sukun,
+              wasla,
+              hamza,
+              madda},
+        emphstyle=\color{red}}
+
+
+\title{\sty{acolor} --- Colors for \ArabTeX}
+
+\author{Karel Mokr\'{y} \and Otakar Smr\v{z}}
+
+
+\begin{document}
+
+\maketitle
+
+\thispagestyle{empty}
+
+\noindent
+Once upon a time, we needed to colorize the diacritics typeset by
+\ArabTeX.%
+\footnote{\hrefurl{http://www.ctan.org/pkg/arabtex/}
+                  {www.ctan.org/pkg/arabtex/} and
+          \hrefurl{ftp://ftp.informatik.uni-stuttgart.de/pub/arabtex/arabtex.html}
+                  {ftp.informatik.uni-stuttgart.de/pub/arabtex/}}
+We wrote the \sty{acolor} package to achieve that, and as time went
+by, we have refined it further.%
+\footnote{\hrefurl{http://github.com/otakar-smrz/encode-arabic/}
+                  {github.com/otakar-smrz/encode-arabic/} and
+          \hrefurl{http://www.ucw.cz/~karel/}{www.ucw.cz/~karel/}}
+The \sty{acolor} package depends on \sty{xcolor}, and you should have
+\ArabTeX{} installed. Then put \sty{acolor} where \TeX{} can find it,
+and in your document, type \lstinline!\usepackage{arabtex} \usepackage{acolor}!.
+
+The \sty{acolor} package provides the
+\lstinline[emph={[2]group,color},emphstyle={[2]\itshape}]!\acolor{group}{color}!
+command. You can use it to set colors for individual types of
+graphemes or their groups. The effect of \sty{acolor} can be turned on
+and off with \lstinline{\acoloron} and \lstinline{\noacolor}:
+\begin{lstlisting}
+\def\acoloron{\def\a@color##1##2{{\color{acolor4##1}##2}}}
+\def\noacolor{\def\a@color##1##2{##2}}
+\def\acolorlet#1#2{\acolor{#1}{acolor4#2}}
+\def\acolor#1#2{%
+    \ifthenelse{\equal{#1}{everything}}{\acolor{letters}   {#2}%
+                                        \acolor{omissibles}{#2}%
+                                        \acolor{tatwil}    {#2}%
+                                        \acolor{others}    {#2}}{%
+    \ifthenelse{\equal{#1}{letters}}   {\acolor{isolated}  {#2}%
+                                        \acolor{initial}   {#2}%
+                                        \acolor{medial}    {#2}%
+                                        \acolor{final}     {#2}}{%
+    \ifthenelse{\equal{#1}{isolated}}  {\acolor{0}         {#2}}{%
+    \ifthenelse{\equal{#1}{initial}}   {\acolor{3}         {#2}}{%
+    \ifthenelse{\equal{#1}{medial}}    {\acolor{2}         {#2}}{%
+    \ifthenelse{\equal{#1}{final}}     {\acolor{1}         {#2}}{%
+    \ifthenelse{\equal{#1}{omissibles}}{\acolor{diacritics}{#2}%
+                                        \acolor{hamzamadda}{#2}}{%
+    \ifthenelse{\equal{#1}{diacritics}}{\acolor{vowelmarks}{#2}%
+                                        \acolor{emptymarks}{#2}%
+                                        \acolor{shadda}    {#2}}{%
+    \ifthenelse{\equal{#1}{vowelmarks}}{\acolor{fatha}     {#2}%
+                                        \acolor{kasra}     {#2}%
+                                        \acolor{damma}     {#2}%
+                                        \acolor{quran}     {#2}%
+                                        \acolor{ammad}     {#2}%
+                                        \acolor{zwarakay}  {#2}%
+                                        \acolor{bars}      {#2}}{%
+    \ifthenelse{\equal{#1}{emptymarks}}{\acolor{sukun}     {#2}%
+                                        \acolor{wasla}     {#2}}{%
+    \ifthenelse{\equal{#1}{hamzamadda}}{\acolor{hamza}     {#2}%
+                                        \acolor{madda}     {#2}}{%
+    \colorlet{acolor4#1}{#2}}}}}}}}}}}}\ignorespaces}
+\end{lstlisting}
+
+The color definitions are the responsibility of the \sty{xcolor}
+package, esp.~its \lstinline{\colorlet} command. This means that color
+settings are valid within the enclosing \TeX{} group only, which seems
+a very desirable feature. From the source code above, you can see how
+groups of graphemes are defined, and what dependencies there are among
+them.
+
+\newcommand{\example}{\<\fullvocalize kitAbu al-'ayyAmi li-.t_ah_a .husayniN
+                                      `anhu wa `A'ilatihi 'Ana_dAka>}
+
+\noindent
+\begin{tabular*}{\textwidth}{@{}l@{\extracolsep{\fill}}r@{}}
+\lstinline|\acolor{everything}{purple}|      & \acolor{everything}{purple}\example \\
+\lstinline|\acolor{diacritics}{red}|         & \acolor{diacritics}{red}\example \\
+\lstinline|\acolor{omissibles}{white}|       & \acolor{omissibles}{white}\example \\
+\lstinline|\acolor{hamza}{red!30!yellow}|    & \acolor{hamza}{red!30!yellow}\example \\
+\lstinline|\acolor{vowelmarks}{blue}|        & \acolor{vowelmarks}{blue}\example \\
+\lstinline|\acolor{emptymarks}{red!90!blue}| & \acolor{emptymarks}{red!90!blue}\example \\
+\lstinline|\acolor{isolated}{gray}|          & \acolor{isolated}{gray}\example \\
+\end{tabular*}
+
+\bigskip
+
+For assigning the values of `acolors' to themselves, it is advisable
+to use the
+\lstinline[emph={[2]group,grapheme},emphstyle={[2]\itshape}]!\acolorlet{group}{grapheme}!
+macro instead of the package-internal prefix for color names disclosed
+with the code above.
+
+\bigskip
+
+\hrule
+
+\paragraph{Question:}
+
+When the \sty{acolor} package is included and the
+\lstinline{\spreadtrue} option is in effect, undesirable artifacts
+that appear to be misplaced {\transtrue\arabfalse\<ta.twIls>} are
+output. When calling the command
+\lstinline[emph={[2]color},emphstyle={[2]\itshape}]!\acolor{everything}{color}!,
+punctuation and numbers are not colored.\\
+\strut\hfill\emph{George Kamel}
+
+\paragraph{Answer:}
+
+Thanks to this report, we have fixed the issue with
+{\transtrue\arabfalse\<ta.twIls>} and introduced new colors
+\lstinline{tatwil} and \lstinline{others} into \lstinline{everything}.
+
+\noindent
+\begin{tabular*}{\textwidth}{@{}l@{\extracolsep{\fill}}r@{}}
+\begin{lstlisting}[linewidth=.4\linewidth]
+\spreadtrue
+\acolor{tatwil}{yellow}
+\acolor{others}{blue}
+\end{lstlisting}
+&
+\parbox{.6\linewidth}{%
+\spreadtrue
+\acolor{tatwil}{yellow}
+\acolor{others}{blue}
+\begin{arabtext}
+\spreadtrue\novocalize al-'umam al-mt.hdT: 'isqA.t ri.hlaT \LR{MH17} fI 'UkrAniyA \lq ^garImaT .harb\rq
+\end{arabtext}}
+\end{tabular*}
+
+\bigskip
+
+\hrule
+
+\paragraph{Question:}
+
+I would like to colorize the endings of verb and noun forms without
+losing the correct bindings where the color switches. Do you see any
+possibility I could realize that without too complicated effort?\\
+\strut\hfill\emph{Torsten Nieland}
+
+\paragraph{Answer:}
+
+Inspired by this request, we have extended \sty{acolor} to allow all
+the commands mentioned above to be used even as part of the input
+notation. This does save much of the effort. The other key thing is
+that \lstinline{\nospace} would suppress any intervening space between
+the adjacent glyphs, which is useful with various \ArabTeX's commands
+in general.
+
+\lineskiplimit -20pt
+
+Let us assume we want to colorize in red the stem (letters and vowels) of the word {\transtrue\<ista.tA`at-i>}, and leave its prefix and suffix in the default style (the original problem is an inverse to this, but rather analogous).
+
+\lineskiplimit -0pt
+
+We will typeset the Arabic script in parts, each featuring its settings of `acolors'. We can enforce the connecting variants of the glyphs via hyphens \lstinline!-!.
+
+The grouping into the parts has to be done by complete `syllables'. There might be cases when the letter belongs to one group, but its vocalization into another, and shall have the different style. These border cases will have to be singled out into groups of their own.
+
+We would like to divide the word graphically like \lstinline!ista|.tA`|at-i!, the stem
+being \lstinline!|.tA`|!. Given the above, the parts will be
+\lstinline!{ista-}{-.tA}{`a-}{-t-i}!. Note that there is no junction between
+\lstinline!{-.tA-}{-`a-}!.
+
+We have to style the \lstinline!{`a-}! group only in the letter, not in the diacritics, while \lstinline!{-.tA}! will have both the letters and the vocalization in the style of the stem. The code will then be:
+\begin{lstlisting}
+\<ista- \nospace{\acolor{everything}{red} -.tA}
+        \nospace{\acolor{letters}{red}     `a-}\nospace -t-i>
+\end{lstlisting}
+\hfill
+\<ista- \nospace{\acolor{everything}{red} -.tA}
+        \nospace{\acolor{letters}{red}     `a-}\nospace -t-i>
+
+Of course, one could write a macro of five fields (prefix, prefix-border, stem, suffix-border, suffix), with an optional parameter for the stem's color, to avoid the inconvenient noise in the document:
+\begin{lstlisting}
+\newcommand{\colorstem}[6][red]{%
+\<#2 \nospace{\acolor{diacritics}{#1} #3}
+     \nospace{\acolor{everything}{#1} #4}
+     \nospace{\acolor{letters}   {#1} #5}\nospace #6>}
+
+\colorstem{ista-}{}{-.tA}{`a-}{-t-i}
+%
+\acolor{fatha}{blue}\acolor{kasra}{red}
+\colorstem[orange]{ista-}{}{-.tA}{`a-}{-t-i}
+%
+\acolorlet{everything}{fatha}\acolor{kasra}{magenta}
+\colorstem[black]{tasta-}{}{-.tI-}{-`u}{}
+%
+\acolorlet{everything}{kasra}\acolor{kasra}{black}
+\colorstem[orange]{ista-}{}{-.tI-}{-`i-}{-y}
+\end{lstlisting}
+\newcommand{\colorstem}[6][red]{%
+\<#2 \nospace{\acolor{diacritics}{#1} #3}
+     \nospace{\acolor{everything}{#1} #4}
+     \nospace{\acolor{letters}   {#1} #5}\nospace #6>}
+\hfill
+\colorstem{ista-}{}{-.tA}{`a-}{-t-i}
+%
+\acolor{fatha}{blue}\acolor{kasra}{red}
+\colorstem[orange]{ista-}{}{-.tA}{`a-}{-t-i}
+%
+\acolorlet{everything}{fatha}\acolor{kasra}{magenta}
+\colorstem[black]{tasta-}{}{-.tI-}{-`u}{}
+%
+\acolorlet{everything}{kasra}\acolor{kasra}{black}
+\colorstem[orange]{ista-}{}{-.tI-}{-`i-}{-y}
+
+\bigskip
+
+\hrule
+
+\bigskip
+
+\acolor{everything}{.}
+\acolor{isolated}{red}
+\acolor{omissibles}{orange}
+\hfill\novocalize\<'OtAkAr "esmr^z>
+
+\end{document}

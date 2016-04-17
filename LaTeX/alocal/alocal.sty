@@ -1,0 +1,294 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% alocal.sty
+% ArabTeX local extensions
+% 03.08.2014
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% (c) Klaus Lagally
+%     Institut fuer Formale Methoden der Informatik
+%     Universitaet Stuttgart
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% (c) Otakar Smrz
+%     Institute of Formal and Applied Linguistics
+%     Charles University in Prague
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\a@message {2014/08/03 Local Extensions of ArabTeX 3.11 by Otakar Smrz}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% arabtex.sty
+% 22.08.2003
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%% 2007-05-23 Otakar Smrz
+
+\newif \if@shadda \@shaddatrue
+
+%%%%%%%%%%%%%%%%%%%%%%%% vowelization options %%%%%%%%%%%%%%%%%%%%%%%%%
+
+\pdef \nodiacritics {% no diacritics including shadda
+\@vocalsfalse \v@cfalse \@sukunfalse \@sukfalse \@shaddafalse }
+
+\pdef \novocalize   {% no diacritics except explicitly indicated
+\@vocalsfalse \v@cfalse \@sukunfalse \@sukfalse \@shaddatrue  }
+
+\pdef \v@calize     {% diacritics for short vowels only
+\@vocalstrue  \v@ctrue  \@sukunfalse \@sukfalse \@shaddatrue  }
+
+\pdef \fullv@calize {% all diacritics
+\@vocalstrue  \v@ctrue  \@sukuntrue  \@suktrue  \@shaddatrue  }
+
+\let \noshadda \nodiacritics    \let \novowels \novocalize
+\let \vocalize \v@calize        \let \fullvocalize \fullv@calize
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% acmd.sty
+% 20.08.2003
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\all@wcmd \nodiacritics   \all@wcmd \noshadda   \all@wcmd \novowels
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% apatch.sty <- aparse.sty
+% 02.07.2006
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\def \set@shadda    {\if@shadda \advance \last@mod \c@shadda \fi}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% ascan.sty
+% 22.08.2003
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\def \t@down #1{% after _
+\apply \set@char \tocase #1\of
+{       a{\nxp \a@a }
+        A{Y}
+        d{F}
+        e{\nxp \a@E }
+        h{X}
+        i{\nxp \a@i }
+        I{\nxp \a@iA }   %% 2006-04-17 Otakar Smrz
+        k{R}
+        o{\nxp \a@o }
+        O{\nxp \a@O }
+        s{C}
+        t{C}
+        u{\nxp \a@u }
+        U{\nxp \a@o }
+        z{F}
+}\endcase \t@tail @#1}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% arabtoks.sty
+% 17.07.1999
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\def \a@iA {\sk@@  ,20 } % reserved for vowel %% 2006-04-17 Otakar Smrz
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% aparse.sty
+% 26.05.2003
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\def \sv@iA {\sv@@iA  }% i long with alif %% 2006-04-17 Otakar Smrz
+
+\sv@def \a@iA {\sv@iA }% special short i %% 2006-04-17 Otakar Smrz
+
+\def \is@vowel #1{% test for all vowels
+\is@in@list #1aeiouAEIOUY%
+\a@a \a@e \a@i \a@o \a@u
+\a@A \a@E \a@I \a@O \a@U
+\a@iA   %% 2006-04-17 Otakar Smrz
+\a@Za \a@Ze \a@Zi \a@Zo \a@Zu
+\a@ZA \a@ZE \a@ZI \a@ZO \a@ZU >}
+
+\def \sv@@iA #1{% long A > i long with alif %% 2006-05-15 Otakar Smrz
+\ifk@rd \else \add@kasra \fi
+\put@syl \test@B #1\sv@Avwl }
+
+\def \syl@arabhamza #1#2#3{% non-initial hamza, context #1'#2#3
+\case #2\of
+{   "{\togglev@c \syl@hamza #1#3}   % toggle vowel
+    |{\syl@hamza #1#3}              % ignore bar
+   \a@iA%                           %% 2006-05-15 Otakar Smrz
+   AIUYEO{\syl@hamzamid #1#2#3#3}   % arabic rules
+\default {\syl@@arabhamza #1#2#3}   % test for final position
+}\endcase }
+
+\def \syl@@hamzamid #1#2#3{% intermediate hamza, context #1'#2#3
+    \def \next {\syl@voctest #2}%
+\ifx #1I\ifqur@n \put@con B\else \put@con Y\fi \add@hamza \else
+\if\is@in@list #1iy\a@iA>\put@con Y\add@hamza \else %% 2006-05-15 Otakar Smrz
+\if\is@in@list #2iIE>\put@con Y\add@hamza
+    \ifqur@n \add@hamzalow \fi \else
+\if\is@in@list #1uo>\put@con w\add@hamza \else
+\if\is@in@list #2uo>\put@con w\add@hamza \else
+\if\is@in@list #2UO>%
+    \ifqur@n \put@Q #1\else \put@con w\add@hamza \fi \else
+\if\is@in@list #1AUO>\put@Q #1\else
+\if\is@in@list #2A>\put@con a\add@madda
+    \put@syl \def \next {\syl@con }\else
+\if\is@in@list #2\a@a>\put@con a\add@fathaspec
+    \put@syl \def \next {\syl@con }\else
+\ifx #1a\put@con a\add@hamza \else
+\ifx #2a\ifqur@n \put@Q #1\else \put@con a\add@hamza \fi \else
+    \put@Q #1% deposit Hamza
+\fi\fi\fi\fi\fi\fi\fi\fi\fi\fi\fi
+\ifx #2Q\def \next {\syl@doublehamza }%
+\fi \next }
+
+\def \sv@uInt #1{% short u, otherwise
+\case #1\of
+{   w{\sv@uwInt }% uw -> U  %% 2007-06-23 Otakar Smrz
+    u{\sv@UInt  }% uu -> U  %% 2007-05-11 Otakar Smrz
+    W{\sv@UInt W}% uW -> UW %% 2007-05-11 Otakar Smrz
+    N{\add@dammatan \put@syl \syl@ignore }% tanwin waw
+\default {\add@damma \put@syl \syl@con #1}% next syllable
+}\endcase }
+
+\def \sv@uwInt #1{% long u
+\add@damma \put@syl \test@B #1\sv@uwvwl }
+
+\def \sv@uwvwl #1{% long u carrier
+    \put@con w\ifm@dda \add@madda \m@ddafalse \fi   % -U becomes -uw
+\case #1\of
+{   w{\@sukfalse\add@shadda \syl@voctest}       % -Uw becomes -uww
+    -{\syl@voctie U}                            % not -U-
+%   A{\put@syl \put@con a\put@syl \syl@con }    %% 2007-06-23 Otakar Smrz
+%   fixes the bug with missing "a" in <uwA>
+    W{\put@syl \put@con a\put@syl \syl@con }    %% 2007-05-11 Otakar Smrz
+\default {\sv@@Uvwl #1}
+}\endcase }
+
+\def \sv@Uvwl #1{% long u carrier
+    \put@con w\ifm@dda \add@madda \m@ddafalse \fi   % -U becomes -uw
+\case #1\of
+{   w{\@sukfalse\add@shadda \syl@voctest}       % -Uw becomes -uww
+    -{\syl@voctie U}                            % not -U-
+    A{\put@syl \put@con a\put@syl \syl@con }
+    W{\put@syl \put@con a\put@syl \syl@con }    %% 2007-05-11 Otakar Smrz
+\default {\sv@@Uvwl #1}
+}\endcase }
+
+\def \sv@@iInt #1{% short i
+\case #1\of
+{   y{\sv@@I }% iy -> I
+    i{\sv@@I }% ii -> I %% 2007-05-11 Otakar Smrz
+    N{\add@kasratan \put@syl \syl@ignore }% tanwin yah
+    -{\add@kasra \syl@voctie i}
+\default {\add@kasra \put@syl \syl@con #1}% next syllable
+}\endcase }
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% atrans.sty
+% 14.06.2003
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\tr@def \a@iA {i\@vocaltrue }   %% 2006-04-17 Otakar Smrz
+
+\gdef \tr@@aword #1{% transcribe rest of word
+\let \tr@old \tr@act \def \tr@act {#1}%
+\case #1\of
+{       >{\@gobble }
+    \cap {\c@ptrue \tr@aword }
+      |"^{\tr@aword }
+        -{-\tr@aword }
+   TXlEeQ{\csname tr@@\string #1\endcsname }
+ \a@a NUW{\setc@p #1\kill@alif }
+        P{\tr@P \tr@aword }
+        a{\tr@wasla #1} %% 2007-05-11 Otakar Smrz
+        i{\tr@@ii} %% 2007-05-11 Otakar Smrz
+        u{\tr@@uu} %% 2007-05-11 Otakar Smrz
+    \a@Ze{\xpa\tr@aword \tr@old }
+\default {\@vocalfalse
+        \ifcat \nxp #1-#1\else \setc@p #1%
+        \fi \tr@aword }
+}\endcase }
+
+\gdef \kill@alif #1{% delete alif or waw after N, U, W, _a
+\case #1\of
+{  aAIYUW{\tr@aword } %% 2007-05-11 Otakar Smrz
+\default {\tr@aword #1}
+}\endcase }
+
+\gdef \tr@@ii #1{%% 2007-05-11 Otakar Smrz
+\ifx #1i\def \next {\tr@@aword I}\else
+\def \next {\tr@wasla i#1}\fi \next }
+
+\gdef \tr@@uu #1{%% 2007-05-11 Otakar Smrz
+\ifx #1u\def \next {\tr@@aword U}\else
+\def \next {\tr@wasla u#1}\fi \next }
+
+% \gdef \tr@@T #1{\@vocalfalse
+% \ifx #1|t\let \next \tr@aword \else %% 2007-05-11 Otakar Smrz
+% t\def \next {\tr@aword #1}\fi \next }
+
+\gdef \x@s #1{\oalign{#1\crcr\hidewidth \nsh@ft{34}% accent for _h
+    \vbox to .2ex {\hbox{\char'25}\vss}\hidewidth}}
+                                           %% 2008-04-26 Otakar Smrz
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+{\catcode `\^ 7 \catcode `\ =9 \catcode `\^^M=9 \catcode `\^^I=9
+\catcode `\~=10
+\gdef \tr@czech {% define Czech modifications %% 2007-05-27 Otakar Smrz
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\tr@zdmg
+%% generally relevant
+\gdef \tr@y {j}
+\gdef \tr@G {\tr@dz}    \gdef \tr@dz {\tr@cap d\v{z}}
+\gdef \tr@X {\tr@ch}    \gdef \tr@ch {\tr@cap ch}
+%% experimental only
+\gdef \tr@q {\d{k}}
+\gdef \tr@w {v}
+\gdef \tr@P {\rsh@ft{07}{\ifc@p \raise .2ex \hbox {$^c$}\kern-.1em
+    \else $^c$\kern-.05em\fi }\@vocalfalse }
+\gdef \tr@Q {\rsh@ft{07}{\ifc@p \kern-.05em\raise .2ex \hbox {'\/}
+    \else \kern-.1em{'\/}\fi }\@vocalfalse }
+\gdef \tr@A {\'a\-\@vocaltrue }
+\gdef \tr@E {\'e\-\@vocaltrue }
+\gdef \tr@I {\ifc@p\'I\else\'\i\fi\-\@vocaltrue }
+\gdef \tr@O {\'o\-\@vocaltrue }
+\gdef \tr@U {\'u\-\@vocaltrue }
+\gdef \tr@Y {\'a\-\@vocaltrue }
+\tr@def \a@a {\'a\-\@vocaltrue }
+\tr@def \a@i {\ifc@p\'I\else\'\i\fi\-\@vocaltrue }
+\tr@def \a@u {\'u\-\@vocaltrue }
+\gdef \wasl@symb {\relax} %% 2014-08-03 Otakar Smrz
+\a@message {ZDMG~transliteration~with~Czech~modifications.}}}
+
+%% set up wasla in all transliterations %% 2014-08-03 Otakar Smrz
+
+\gdef \wasl@symb {'} %% 2014-08-03 Otakar Smrz
+
+\def \settrans #1{% switch the transliteration
+\gdef \wasl@symb {'} %% 2014-08-03 Otakar Smrz
+\lowercase {\def \tr@code {#1}\begingroup
+\def \tr@lookup ##1#1##2##3\@@ {\endgroup ##2}%
+\xpa \tr@lookup \tr@table #1\tr@default \@@ }%
+\let \tr@oldcode \tr@code }
+
+\gdef \tr@wasla #1{% initial vowel, Arabic %% 2007-05-11 Otakar Smrz
+\ifiz@fet \@vocalfalse \fi
+\ifu@gh \@vocalfalse \fi
+\ifh@mza \if@vocal \if \relax\wasl@symb \setc@p #1\else
+                             \wasl@symb \fi
+         \else \setc@p #1\fi
+\else \setc@p #1\fi
+\@vocaltrue \tr@aword }
+
+%% extend the table of transliterations %% 2014-08-03 Otakar Smrz
+
+\def \tr@table {% table of transliterations
+standard\tr@standard    zdmg\tr@standard    english\tr@encislam
+turk\tr@turk            urdu\tr@urdu        iranica\tr@enciran
+farsi\tr@farsi          lazard\tr@lazard    kashmiri\tr@kash
+uighur\tr@uigh          uighure\tr@uighe    czech\tr@czech }
+
+
+\endinput

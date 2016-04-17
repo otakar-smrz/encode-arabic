@@ -1,0 +1,137 @@
+\documentclass[10pt,a4paper]{article}
+
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{xcolor}
+
+\usepackage{arabtex}    % automatically includes alocal.sty
+
+\newcommand{\sty}[1]{\textsf{#1.sty}}
+
+\newcommand{\exts}[1]{\lstinline|<#1>|}
+
+\newcommand{\orth}[1]{{\showfalse\arabtrue\transfalse\<#1>}}
+\newcommand{\phon}[1]{{\showfalse\arabfalse\transtrue\<#1>\/}}
+
+\newcommand{\expl}[1]{\showtrue\arabtrue\transtrue\<#1>}
+
+\lstset{language=[LaTeX]TeX,
+        basicstyle=\renewcommand{\baselinestretch}{0.95}\ttfamily,
+        flexiblecolumns=true,
+        keepspaces=true,
+        texcs={nodiacritics,noshadda,novowels,wasl@symb,relax},
+        texcsstyle=\color{purple},
+        commentstyle={},
+        emph={ii,uu,UW,uW,uwA,czech},
+        emphstyle=\color{red}}
+
+
+\title{\sty{alocal} --- Local Extensions of \ArabTeX}
+
+\author{Otakar Smr\v{z}\quad\texttt{<otakar-smrz@users.sf.net>}}
+
+
+\begin{document}
+
+\maketitle
+
+\thispagestyle{empty}
+
+\noindent
+This package implements some of the notational extensions of Encode
+Arabic \url{http://github.com/otakar-smrz/encode-arabic/} to work in
+\ArabTeX.
+
+The \sty{alocal} package is invoked by \ArabTeX{} as the file
+containing local extensions. Either overwrite your copy of this file
+in the \ArabTeX{} distribution, or enforce in some other way the
+redefinitions that our version of \sty{alocal} consists of. Please
+report to us any bugs or incompatibility issues.
+
+\paragraph{Defective writing of \protect\lstset{moredelim=[is][\color{red}]{-}{-}}
+                                \protect\lstinline|<-_I->|}
+enables easy encoding of \expl{m_I'aT} and its derivatives, just like
+\exts{_U} works for \raisebox{0pt}[10pt]{\expl{'_Ul_a'ika}}.
+
+\medskip
+
+\begin{tabular}{l}
+\<m_I'aTuN bi-al-m_I'aTi>               \\
+\<mi'aTuN bi-al-m_I'aTi>                \\
+\<mi'aTuN bi-al-mi'aTi>                 \\
+\<\fullvocalize m"_I'aTuN bi-al-mi'aTi> \\
+\<\novocalize m"_I'aTuN bi-al-mi'aTi>   \\
+\<m_I'atAni wa-m_I'AtuN>                \\
+\end{tabular}
+
+\paragraph{Doubled vowels \protect\exts{ii} and \protect\exts{uu}}
+are set equivalent to \exts{I}, resp.~\exts{U}, in all contexts. This
+is similar to \exts{aa} becoming \exts{A}. The distinction between
+\exts{I} versus \exts{iy} and \exts{U} versus \exts{uw} is preserved.
+
+\medskip
+
+\begin{tabular}{p{.5\linewidth}l}
+\<zuuwaarii>    &   \<zUwArI>   \\
+\<zuwwaariy>                    \\
+\end{tabular}
+
+\paragraph{Silent \protect\phon{'alif} spelled as \protect\exts{UW}
+           or \protect\exts{uW}}
+compares more easily with the other \linebreak \exts{aW} variant of
+the verbal ending. Writing \exts{uuW} is equivalent to \exts{UW}.
+
+\medskip
+
+\begin{tabular}{p{.5\linewidth}l}
+\<katabUW>      &   \<katabUA>  \\
+\<katabuW>      &   \<ramaW>    \\
+\<katabuuW>     &   \<ramaWA>   \\
+\end{tabular}
+
+\bigskip
+
+Along with that, we have fixed the \ArabTeX's bug in equating the
+\exts{uwA} sequence with \exts{UA}, thus printing \orth{BUA} instead
+of \orth{BuwA}. Now, both look different.
+
+\paragraph{Vocalization degree}
+is extended with the \lstinline|\nodiacritics| option, which suppresses the
+printing of \phon{^sadda} and all other diacritics. This option has an
+obvious \lstinline|\noshadda| synonym, while \lstinline|\novocalize| can also be
+invoked as \lstinline|\novowels|.
+
+\paragraph{Transcription of \protect\phon{wa.sla}}
+can be controlled and customized by redefining the \lstinline|\wasl@symb|
+command. If it is set to \lstinline|\relax|, no \phon{wa.sla} is typeset
+and the original auxiliary vowel is not dropped. The default setting
+is \lstinline|\gdef\wasl@symb{'}|.
+
+\paragraph{Czech-style transcription}
+has been defined as an experimental modification of the
+standard. Enforce it with \lstinline|\settrans{czech}|.
+
+\bigskip
+
+\settrans{czech}
+\begin{tabular}{l}
+\lstinline|\settrans{czech}|    \\[6pt]
+\<yUladu ^gamI`u an-nAsi>       \\
+\<wa-qad wuhibUW `aqlaN>        \\
+\<bi-rU.hi al-'i_hA'i>          \\
+\end{tabular}
+
+\medskip
+
+\settrans{standard}
+\begin{tabular}{l}
+\lstinline|\settrans{standard}| \\[6pt]
+\<yUladu ^gamI`u an-nAsi>       \\
+\<wa-qad wuhibUW `aqlaN>        \\
+\<bi-rU.hi al-'i_hA'i>          \\
+\end{tabular}
+
+\paragraph{Fixing the \protect\phon{_h} accent}
+is noticable with fonts other than Computer Modern.
+
+\end{document}
