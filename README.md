@@ -15,7 +15,7 @@ New things
 
 - The [Haskell](http://github.com/otakar-smrz/encode-arabic/tree/master/Haskell/Encode) library has fixed the typesetting of wasla and quoting of vowels in the [phonological transcription](http://github.com/otakar-smrz/encode-arabic/blob/master/Haskell/Encode/Encode/Arabic/ArabTeX/ZDMG.hs).
 
-- There is support for calling the Haskell executables from within [Python](http://github.com/otakar-smrz/encode-arabic/tree/master/Python/Encode) as if they were native functions.
+- There is support for calling the Haskell executables from within [Python](http://github.com/otakar-smrz/encode-arabic/tree/master/Python/Encode) as if they were [native functions](http://github.com/otakar-smrz/encode-arabic/tree/master/Python/Encode/README.ipynb).
 
 - Both Haskell and [Perl](http://github.com/otakar-smrz/encode-arabic/tree/master/Perl/Encode) libraries now support the [Habash-Soudi-Buckwalter](http://github.com/otakar-smrz/encode-arabic/tree/master/Haskell/Encode/Encode/Arabic/Habash.hs) transliteration scheme, next to many others. Check out our [web service](http://otakar-smrz.github.io/encode-arabic).
 
