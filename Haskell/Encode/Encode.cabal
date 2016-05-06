@@ -1,13 +1,13 @@
 name:               Encode
-version:            1.3.7
+version:            1.3.8
 license:            GPL
 license-file:       LICENSE
-extra-source-files: INSTALL, Setup.PL
-copyright:          2014
+extra-source-files: README.md
+copyright:          2016
 author:             Otakar Smrz
 maintainer:         otakar-smrz users.sf.net
 homepage:           http://otakar-smrz.users.sf.net/
-package-url:        http://sourceforge.net/projects/encode-arabic/
+package-url:        http://github.com/otakar-smrz/encode-arabic/
 category:           Text, Codec
 build-depends:      Cabal, base < 5.0, mtl, containers
 build-type:         Simple

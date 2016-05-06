@@ -1,7 +1,7 @@
 -- |
 --
 -- Module      :  Main.Encode
--- Copyright   :  Otakar Smrz 2005-2013
+-- Copyright   :  Otakar Smrz 2005-2016
 -- License     :  GPL
 --
 -- Maintainer  :  otakar-smrz users.sf.net
@@ -53,12 +53,12 @@ options = [ Option ['h'] ["help"]       (NoArg  DisplayUsage)
                                                 "show program's version" ]
 
 
-copyleft = unlines ["Encode Arabic (C) 2013-2005 Otakar Smrz",
+copyleft = unlines ["Encode Arabic (C) 2016-2005 Otakar Smrz",
                     "GNU General Public License http://www.gnu.org/licenses/"]
 
 synopsis = unlines [copyleft,
-                    "         http://sourceforge.net/projects/encode-arabic/",
-                    "                  http://encode-arabic.sourceforge.net/",
+                    "           http://github.com/otakar-smrz/encode-arabic/",
+                    "                           http://encode-arabic.sf.net/",
                     "                             <otakar-smrz users.sf.net>",
                     "",
                     "encode [--OPTIONS] [ENCODING]"]
