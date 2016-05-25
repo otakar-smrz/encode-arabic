@@ -13,7 +13,6 @@ lib/Encode/Arabic/ArabTeX/ZDMG.pm
 lib/Encode/Arabic/ArabTeX/ZDMG/RE.pm
 lib/Encode/Arabic/Buckwalter.pm
 lib/Encode/Arabic/CGI.pm
-lib/Encode/Arabic/Exec.pm
 lib/Encode/Arabic/Habash.pm
 lib/Encode/Arabic/Parkinson.pm
 lib/Encode/Mapper.pm
