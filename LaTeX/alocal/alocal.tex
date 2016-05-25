@@ -3,6 +3,7 @@
 \usepackage{hyperref}
 \usepackage{listings}
 \usepackage{xcolor}
+\usepackage{metalogo}
 
 \usepackage{arabtex}    % automatically includes alocal.sty
 
@@ -22,7 +23,7 @@
         texcs={nodiacritics,noshadda,novowels,wasl@symb,relax},
         texcsstyle=\color{purple},
         commentstyle={},
-        emph={ii,uu,UW,uW,uwA,czech},
+        emph={ii,uu,UW,uW,uwA,uuW,aa,H,czech},
         emphstyle=\color{red}}
 
 
@@ -95,6 +96,12 @@ Along with that, we have fixed the \ArabTeX's bug in equating the
 \exts{uwA} sequence with \exts{UA}, thus printing \orth{BUA} instead
 of \orth{BuwA}. Now, both look different.
 
+\medskip
+
+\begin{tabular}{p{.5\linewidth}l}
+\<muwA.tin>     &   \<muwA.salaT>   \\
+\end{tabular}
+
 \paragraph{Vocalization degree}
 is extended with the \lstinline|\nodiacritics| option, which suppresses the
 printing of \phon{^sadda} and all other diacritics. This option has an
@@ -133,5 +140,156 @@ standard. Enforce it with \lstinline|\settrans{czech}|.
 
 \paragraph{Fixing the \protect\phon{_h} accent}
 is noticable with fonts other than Computer Modern.
+
+\bigskip
+
+\hrule
+
+\paragraph{Consistency of \protect\phon{wa.sla}}
+needs to be improved so that vowel tying does not apply across
+paragraph boundaries.
+
+% \paragraph{\protect\phon{iqra'na}}
+% \begin{RLtext}iqra'na\end{RLtext}
+% \begin{RLtext}iqra'na\end{RLtext}
+
+\medskip
+
+\begin{RLtext}
+iqra'
+iqra'I
+iqra'iy
+iqra'A
+iqra'UW
+iqra'uW
+iqra'UA
+iqra'na
+\end{RLtext}
+
+\medskip
+
+\begin{RLtext}
+\fullvocalize
+in'a
+in'ay
+in'ayA
+in'aW
+in'aWA
+in'ayna
+\end{RLtext}
+
+\medskip
+
+\begin{RLtext}
+u'mul
+
+u'mulI
+
+u'mulA
+\end{RLtext}
+
+\begin{RLtext}
+iyqa.z
+
+iyqa.zI
+
+iyqa.zA
+\end{RLtext}
+
+\<u'mulI>
+\<iyqa.zI>
+
+\paragraph{Consistency of \protect\phon{hamza}}
+with \exts{aa}, \exts{ii}, \exts{uu} needs to be revisited.
+
+\medskip
+
+\begin{RLtext}
+iqra'I
+iqra'ii
+iqra'A
+iqra'aa
+iqra'UW
+iqra'uuW
+muqra'U
+muqra'uu
+\end{RLtext}
+
+\medskip
+
+\begin{RLtext}
+ra''As ra''asa ru''isa mura''is
+\end{RLtext}
+
+\paragraph{Silent \protect\phon{taa' marbuu.taH} spelled as \protect\exts{H}}
+needs to be revisited.%
+\footnote{\url{http://ufal.mff.cuni.cz/~smrz/ICFP2006/icfp-encode.pdf\#page=10}}
+
+\medskip
+
+\begin{tabular}{l}
+\<m_I'aHuN bi-al-mi'aHi>                \\
+\<m_I'aH bi-al-mi'aT>                   \\
+\<m_I'aTuN bi-al-mi'aTi>                \\
+\<m_I'aHAni bi-al-mi'aTayni>            \\
+\end{tabular}
+
+\paragraph{Comparison with Arab\XeTeX}
+can provide useful test cases for \phon{hamza}.%
+\footnote{\url{http://mirrors.ctan.org/macros/xetex/latex/arabxetex/arabxetex.pdf\#page=6}}
+
+\medskip
+
+\begin{RLtext}
+'amruN
+'ibiluN
+'u_htuN
+'"u_ht"uN
+'"Uql"Id"Is
+ra'suN
+'ar'asu
+sa'ala
+qara'a
+bu'suN
+'ab'usuN
+ra'ufa
+ru'asA'u
+bi'ruN
+'as'ilaTuN
+ka'iba
+qA'imuN
+ri'AsaTuN
+su'ila
+samA'uN
+barI'uN
+sU'uN
+bad'uN
+^say'uN
+^say'iN
+^say'aN
+sA'ala
+mas'alaTuN
+saw'aTuN
+_ha.tI'aTuN
+jA'a
+ridA'uN
+ridA'aN
+jI'a
+radI'iN
+.daw'uN
+qay'iN
+.zim'aN
+yatasA'alUna
+'a`dA'akum
+'a`dA'ikum
+'a`dA'ukum
+maqrU'aT
+mU'ibAt
+taw'am
+yas'alu
+'a.sdiq^A'uh_u
+ya^g^I'u
+s^U'ila
+\end{RLtext}
 
 \end{document}
