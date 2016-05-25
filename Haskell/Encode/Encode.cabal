@@ -50,14 +50,7 @@ description:        The "Encode" library provides a unified interface for conver
                     University and Chalmers University of Technology, April 2002,
                     <http://code.google.com/p/haskell-functional-parsing/>.
                     .
-                    The "Parsek" library is included for experimental purposes and subsumes
-                    "PureFP.Parsers.Stream". /Parsek/ was developed by Koen Claessen in his
-                    functional pearl article /Parallel Parsing Processes/, Journal of
-                    Functional Programming, 14(6), 741&#150;757, Cambridge University Press,
-                    2004, <http://www.cse.chalmers.se/edu/course/afp/Papers/parser-claessen.pdf>,
-                    <http://hackage.haskell.org/package/parsek/>.
-                    .
-                    "Encode" "PureFP" "Parsek"
+                    "Encode" "PureFP"
 exposed-modules:    Encode,
                         Encode.Arabic,
                             Encode.Arabic.ArabTeX,
@@ -83,8 +76,7 @@ exposed-modules:    Encode,
                             PureFP.Parsers.Parser,
                             PureFP.Parsers.Standard,
                             PureFP.Parsers.Stream,
-                            PureFP.Parsers.Trie,
-                    Parsek
+                            PureFP.Parsers.Trie
 extensions:         MultiParamTypeClasses,
                     FunctionalDependencies,
                     ExistentialQuantification,
@@ -121,8 +113,7 @@ other-modules:      Encode,
                             PureFP.Parsers.Parser,
                             PureFP.Parsers.Standard,
                             PureFP.Parsers.Stream,
-                            PureFP.Parsers.Trie,
-                    Parsek
+                            PureFP.Parsers.Trie
 extensions:         MultiParamTypeClasses,
                     FunctionalDependencies,
                     ExistentialQuantification,
@@ -159,8 +150,7 @@ other-modules:      Encode,
                             PureFP.Parsers.Parser,
                             PureFP.Parsers.Standard,
                             PureFP.Parsers.Stream,
-                            PureFP.Parsers.Trie,
-                    Parsek
+                            PureFP.Parsers.Trie
 extensions:         MultiParamTypeClasses,
                     FunctionalDependencies,
                     ExistentialQuantification,

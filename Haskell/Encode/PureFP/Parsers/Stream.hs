@@ -15,7 +15,9 @@
 --
 -- <http://www.ling.gu.se/~peb/software/functional-parsing/>
 --
--- "Parsek"
+-- <http://hackage.haskell.org/package/parsek>
+--
+-- "Text.ParserCombinators.Parsek"
 
 
 --------------------------------------------------
