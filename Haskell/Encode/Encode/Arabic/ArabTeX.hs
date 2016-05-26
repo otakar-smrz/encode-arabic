@@ -1,7 +1,7 @@
 -- |
 --
 -- Module      :  Encode.Arabic.ArabTeX
--- Copyright   :  Otakar Smrz 2005-2014
+-- Copyright   :  Otakar Smrz 2005-2016
 -- License     :  GPL
 --
 -- Maintainer  :  otakar-smrz users.sf.net
@@ -133,14 +133,14 @@ vowelControl c x l e = case c of
                                          else case envMode e of
 
                             Fullvocalize -> if envWasla e
-                                    then [ j ++ drop 1 n | j <- theWasla,
-                                                           n <- noChange ]
+                                    then [ j ++ dropOne n | j <- theWasla,
+                                                            n <- noChange ]
                                     else [ j ++ n | j <- justAlif,
                                                     n <- noChange ]
 
                             Vocalize -> if envWasla e
-                                    then [ j ++ drop 1 n | j <- justAlif,
-                                                           n <- noChange ]
+                                    then [ j ++ dropOne n | j <- justAlif,
+                                                            n <- noChange ]
                                     else [ j ++ n | j <- justAlif,
                                                     n <- noChange ]
 
@@ -172,6 +172,9 @@ vowelControl c x l e = case c of
                                          [0x0656, 0x0657, 0x0670])
                                       . ((/=) . fromEnum)) s
                      | s <- lookupList x l ]
+
+          dropOne (_:xs) = xs
+          dropOne []     = []
 
 
 shaddaControl :: (OrdMap m, Ord s) => s -> [m s [a]] -> Environ -> [[a]]

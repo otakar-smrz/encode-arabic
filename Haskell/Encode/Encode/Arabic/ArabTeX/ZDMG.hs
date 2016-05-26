@@ -1,7 +1,7 @@
 -- |
 --
 -- Module      :  Encode.Arabic.ArabTeX.ZDMG
--- Copyright   :  Otakar Smrz 2005-2014
+-- Copyright   :  Otakar Smrz 2005-2016
 -- License     :  GPL
 --
 -- Maintainer  :  otakar-smrz users.sf.net
@@ -111,14 +111,17 @@ vowelControl c x l e = if envCap e then consControl x l e
                 Just _  -> if envQuote e then theWasla else noChange
                 Nothing -> if envQuote e then noChange
                                          else
-                           if envWasla e then [ t ++ drop 1 n | t <- theWasla,
-                                                                n <- noChange ]
+                           if envWasla e then [ t ++ dropOne n | t <- theWasla,
+                                                                 n <- noChange ]
                                          else noChange
 
     _   -> noChange
 
     where theWasla = lookupList "W" [wasla]
           noChange = lookupList x l
+
+          dropOne (_:xs) = xs
+          dropOne []     = []
 
 
 shaddaControl :: (OrdMap m, Ord s) => s -> [m s [a]] -> Environ -> [[a]]
