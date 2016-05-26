@@ -29,7 +29,7 @@
 module PureFP.Parsers.Parser where
 
 infixr 4  <:>
-infixl 3  <*> , *>
+infixl 3  </> , />
 infixl 2  <+>
 
 
@@ -45,7 +45,7 @@ class Parser m s | m -> s where
 --------------------------------------------------
 -- the /Monoid/ class (section 2.5)
 
-class Monoid m where
+class Monoid' m where
   zero  :: m a
   (<+>) :: m a -> m a -> m a
   anyof :: [m a] -> m a
@@ -70,10 +70,10 @@ class PreMonad m where
 -- of the definitions in section 2.8
 
 class (Monad m, Functor m) => Sequence m where
-  (<*>) :: m (a -> b) -> m a -> m b
-  ( *>) :: m a -> m b -> m b
-  p <*> q = p >>= \f -> fmap f q
-  p  *> q = fmap (\x y -> y) p <*> q
+  (</>) :: m (a -> b) -> m a -> m b
+  ( />) :: m a -> m b -> m b
+  p </> q = p >>= \f -> fmap f q
+  p  /> q = fmap (\x y -> y) p </> q
 
 
 {-------------------------------------------------
@@ -146,18 +146,18 @@ class Lookahead m s | m -> s where
 success :: Monad m => m ()
 success = return ()
 
-many0 :: (Monoid m, Sequence m) => m a -> m ()
+many0 :: (Monoid' m, Sequence m) => m a -> m ()
 many0 p = ps
-  where ps = success <+> p *> ps
+  where ps = success <+> p /> ps
 
 syms0 :: (Sequence m, Symbol m s) => [s] -> m ()
 syms0 []     = success
-syms0 (s:ss) = sym s *> syms0 ss
+syms0 (s:ss) = sym s /> syms0 ss
 
 (<:>) :: Sequence m => m a -> m [a] -> m [a]
-p <:> ps = fmap (:) p <*> ps
+p <:> ps = fmap (:) p </> ps
 
-many :: (Monoid m, Sequence m) => m a -> m [a]
+many :: (Monoid' m, Sequence m) => m a -> m [a]
 many p = ps
   where ps = return [] <+> p <:> ps
 

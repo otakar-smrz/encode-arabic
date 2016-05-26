@@ -1,7 +1,7 @@
 -- |
 --
 -- Module      :  Encode.Extend
--- Copyright   :  Otakar Smrz 2005-2011
+-- Copyright   :  Otakar Smrz 2005-2016
 -- License     :  GPL
 --
 -- Maintainer  :  otakar-smrz users.sf.net
@@ -51,7 +51,10 @@ module Encode.Extend (
 
 
 import PureFP.OrdMap
+
 import PureFP.Parsers.Parser
+
+import Control.Applicative hiding ((<|>))
 
 import Control.Monad
 
@@ -131,7 +134,7 @@ upper :: (OrdMap m, Ord s) => [s] -> [m s [c]] -> Extend e d ([c] -> [c])
 upper s l = foldM (\ f -> fmap ((.) f) . anyof . map (return . (++))) id
                   [ lookupList x l | x <- s ]
 {-
-upper :: (Ord s, Monad m, Functor m, Monoid m)
+upper :: (Ord s, Monad m, Functor m, Monoid' m)
       => [s] -> [Map s [UPoint]] -> m [UPoint]
 upper s l = (fmap concat . sequence . map (anyof . map return))
                   [ lookupList x l | x <- s ]
@@ -148,13 +151,18 @@ upperWith f s l =
 -- the standard parser from section 3.2
 
 
-instance Monoid (Extend e s) where
+instance Monoid' (Extend e s) where
   zero            = Ext (\ inp -> [])
   Ext p <+> Ext q = Ext (\ inp -> p inp ++ q inp)
 
 
+instance Applicative (Extend e s) where
+  pure a = Ext (\ inp -> [(inp, a)])
+  (<*>)  = ap
+
+
 instance Monad (Extend e s) where
-  return a    = Ext (\ inp -> [(inp, a)])
+  return      = pure
   Ext p >>= k = Ext (\ inp -> concat [ q inp' | (inp', a) <- p inp,
                                                  let Ext q = k a ])
 
@@ -168,7 +176,7 @@ instance Functor (Extend e s) where
 
 instance Sequence (Extend e s)
 {--
-  Ext p <*> Ext q = Ext (\inp -> [ (inp'', f a) | (inp', f) <- p inp, (inp'', a) <- q inp' ])
+  Ext p </> Ext q = Ext (\inp -> [ (inp'', f a) | (inp', f) <- p inp, (inp'', a) <- q inp' ])
 --}
 
 

@@ -1,7 +1,7 @@
 -- |
 --
 -- Module      :  Encode.Mapper
--- Copyright   :  Otakar Smrz 2005-2011
+-- Copyright   :  Otakar Smrz 2005-2016
 -- License     :  GPL
 --
 -- Maintainer  :  otakar-smrz users.sf.net
@@ -54,9 +54,13 @@ import PureFP.OrdMap
 
 import PureFP.Parsers.Parser
 
+import Control.Applicative hiding (many, some)
 
-data (OrdMap m) => Next m s a = Only (m s a)
-                              | Else (m s a) (s -> Maybe a)
+import Control.Monad
+
+
+data Next m s a = Only (m s a)
+                | Else (m s a) (s -> Maybe a)
 
 
 perhaps :: Maybe a -> Maybe a -> Maybe a
@@ -174,20 +178,20 @@ infixl 2 |+|
 (|+|) = (<+>)
 
 
-anySymbol :: (Monoid m, Symbol m a) => [a] -> m a
+anySymbol :: (Monoid' m, Symbol m a) => [a] -> m a
 anySymbol = anyof . map sym
 
-some :: (Monoid m, Sequence m) => m a -> m [a]
+some :: (Monoid' m, Sequence m) => m a -> m [a]
 some p = p <:> many p
 
 
 infixl 5 <->, <.>
 
-(<->) :: (Monoid m, Sequence m) => m a -> b -> m ([c], b)
+(<->) :: (Monoid' m, Sequence m) => m a -> b -> m ([c], b)
 (<->) x y = x <.> return ([], y)
 
-(<.>) :: (Monoid m, Sequence m) => m a -> m b -> m b
-(<.>) = (*>)
+(<.>) :: (Monoid' m, Sequence m) => m a -> m b -> m b
+(<.>) = (/>)
 
 --------------------------------------------------
 -- the ambiguous extended trie from section 4.3.4
@@ -203,7 +207,7 @@ unfoldTrie (FMap g p) = unfoldWith g p
 unfoldTrie node       = node
 
 
-instance Ord s => Monoid (Mapper s) where
+instance Ord s => Monoid' (Mapper s) where
   zero                          = Node [] emptyMap
 
   FMap f p     <+> q            = unfoldWith f p <+> q
@@ -217,8 +221,13 @@ instance Ord s => Monoid (Mapper s) where
 -}
 
 
+instance Ord s => Applicative (Mapper s) where
+  pure a = Node [a] emptyMap
+  (<*>)  = ap
+
+
 instance Ord s => Monad (Mapper s) where
-  return a           = Node [a] emptyMap
+  return             = pure
 
   FMap f p     >>= k = unfoldWith f p >>= k
   Node as pmap >>= k = foldr (<+>) (Node [] (mapMap (>>= k) pmap)) (map k as)

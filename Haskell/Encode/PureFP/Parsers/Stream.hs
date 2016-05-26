@@ -28,13 +28,17 @@ module PureFP.Parsers.Stream (Stream) where
 
 import PureFP.Parsers.Parser
 
+import Control.Applicative
+
+import Control.Monad
+
 
 data Stream s a = Shift (s -> Stream s a)  |
                   a ::: Stream s a         |
                   Nil
 
 
-instance Monoid (Stream s) where
+instance Monoid' (Stream s) where
   zero                  = Nil
 
   Nil      <+> bs       = bs
@@ -44,8 +48,13 @@ instance Monoid (Stream s) where
   Shift f  <+> Shift g  = Shift (\s -> f s <+> g s)
 
 
+instance Applicative (Stream s) where
+  pure a = a ::: Nil
+  (<*>)  = ap
+
+
 instance Monad (Stream s) where
-  return a = a ::: Nil
+  return         = pure
 
   Shift f  >>= k = Shift (\s -> f s >>= k)
   (a:::as) >>= k = k a <+> (as >>= k)
@@ -84,5 +93,3 @@ instance Parser (Stream s) s where
           collect _           = []
   parseFull (a:::p)   inp     = parseFull p inp
   parseFull _         _       = []
-
-

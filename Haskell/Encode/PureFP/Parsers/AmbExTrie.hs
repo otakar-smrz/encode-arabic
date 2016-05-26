@@ -23,7 +23,12 @@
 module PureFP.Parsers.AmbExTrie (AmbExTrie (..), unfold) where
 
 import PureFP.OrdMap
+
 import PureFP.Parsers.Parser
+
+import Control.Applicative
+
+import Control.Monad
 
 
 data AmbExTrie s a = [a] :&: Map s (AmbExTrie s a)    |
@@ -35,7 +40,7 @@ unfold f (as :&: pmap) = map f as :&: mapMap (FMap f) pmap
 unfold f (FMap g p)    = FMap (f . g) p
 
 
-instance Ord s => Monoid (AmbExTrie s) where
+instance Ord s => Monoid' (AmbExTrie s) where
   zero                        = [] :&: emptyMap
 
   FMap f p    <+> q           = unfold f p <+> q
@@ -43,8 +48,13 @@ instance Ord s => Monoid (AmbExTrie s) where
   (as:&:pmap) <+> (bs:&:qmap) = (as++bs) :&: mergeWith (<+>) pmap qmap
 
 
+instance Ord s => Applicative (AmbExTrie s) where
+  pure a = [a] :&: emptyMap
+  (<*>)  = ap
+
+
 instance Ord s => Monad (AmbExTrie s) where
-  return a          = [a] :&: emptyMap
+  return            = pure
 
   FMap f p    >>= k = unfold f p >>= k
   (as:&:pmap) >>= k = foldr (<+>) ([]:&:mapMap (>>=k) pmap) (map k as)

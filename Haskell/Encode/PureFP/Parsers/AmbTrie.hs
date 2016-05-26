@@ -23,20 +23,30 @@
 module PureFP.Parsers.AmbTrie (AmbTrie (..)) where
 
 import PureFP.OrdMap
+
 import PureFP.Parsers.Parser
+
+import Control.Applicative
+
+import Control.Monad
 
 
 data AmbTrie s a = [a] :&: Map s (AmbTrie s a)
 
 
-instance Ord s => Monoid (AmbTrie s) where
+instance Ord s => Monoid' (AmbTrie s) where
   zero                        = [] :&: emptyMap
 
   (as:&:pmap) <+> (bs:&:qmap) = (as++bs) :&: mergeWith (<+>) pmap qmap
 
 
+instance Ord s => Applicative (AmbTrie s) where
+  pure a = [a] :&: emptyMap
+  (<*>)  = ap
+
+
 instance Ord s => Monad (AmbTrie s) where
-  return a          = [a] :&: emptyMap
+  return            = pure
 
   (as:&:pmap) >>= k = foldr (<+>) ([]:&:mapMap (>>=k) pmap) (map k as)
 

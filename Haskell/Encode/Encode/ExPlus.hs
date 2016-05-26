@@ -1,7 +1,7 @@
 -- |
 --
 -- Module      :  Encode.ExPlus
--- Copyright   :  Otakar Smrz 2005-2011
+-- Copyright   :  Otakar Smrz 2005-2016
 -- License     :  GPL
 --
 -- Maintainer  :  otakar-smrz users.sf.net
@@ -55,7 +55,6 @@ import PureFP.Parsers.Standard
 
 import Control.Monad
 import Control.Monad.State
-import Control.Monad.Trans
 
 
 class ExtEnv e where
@@ -135,7 +134,7 @@ upper :: (OrdMap m, Ord s) => [s] -> [m s [c]] -> Extend e d ([c] -> [c])
 upper s l = foldM (\ f -> fmap ((.) f) . anyof . map (return . (++))) id
                   [ lookupList x l | x <- s ]
 {-
-upper :: (Ord s, Monad m, Functor m, Monoid m)
+upper :: (Ord s, Monad m, Functor m, Monoid' m)
       => [s] -> [Map s [UPoint]] -> m [UPoint]
 upper s l = (fmap concat . sequence . map (anyof . map return))
                   [ lookupList x l | x <- s ]
@@ -152,7 +151,7 @@ upperWith f s l =
 -- the standard parser from section 3.2
 
 
-instance Monoid (Extend e s) where
+instance Monoid' (Extend e s) where
   zero    = lift zero
   p <+> q = StateT (\s -> runStateT p s <+> runStateT q s)
 

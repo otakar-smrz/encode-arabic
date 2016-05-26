@@ -23,7 +23,12 @@
 module PureFP.Parsers.ExTrie (ExTrie) where
 
 import PureFP.OrdMap
+
 import PureFP.Parsers.Parser
+
+import Control.Applicative
+
+import Control.Monad
 
 
 data ExTrie s a = Shift (Map s (ExTrie s a))    |
@@ -37,7 +42,7 @@ unfold f (a ::: p)    = f a ::: FMap f p
 unfold f (FMap g p)   = FMap (f . g) p
 
 
-instance Ord s => Monoid (ExTrie s) where
+instance Ord s => Monoid' (ExTrie s) where
   zero                      = Shift emptyMap
 
   (a ::: p)  <+> q          = a ::: (p <+> q)
@@ -47,8 +52,13 @@ instance Ord s => Monoid (ExTrie s) where
   Shift pmap <+> Shift qmap = Shift (mergeWith (<+>) pmap qmap)
 
 
+instance Ord s => Applicative (ExTrie s) where
+  pure a = a ::: zero
+  (<*>)  = ap
+
+
 instance Ord s => Monad (ExTrie s) where
-  return a         = a ::: zero
+  return           = pure
 
   (a ::: p)  >>= k = k a <+> (p >>= k)
   FMap f p   >>= k = unfold f p >>= k

@@ -24,6 +24,8 @@ module PureFP.Parsers.Standard (Standard (..)) where
 
 import PureFP.Parsers.Parser
 
+import Control.Applicative
+
 import Control.Monad.State
 
 
@@ -31,19 +33,22 @@ newtype Standard s a = Std ([s] -> [([s], a)])
 
 
 instance MonadState [s] (Standard s) where
-
-    get = Std (\inp -> [(inp, inp)])
-
-    put s = Std (\inp -> [(s, ())])
+  get   = Std (\inp -> [(inp, inp)])
+  put s = Std (\inp -> [(s, ())])
 
 
-instance Monoid (Standard s) where
+instance Monoid' (Standard s) where
   zero            = Std (\inp -> [])
   Std p <+> Std q = Std (\inp -> p inp ++ q inp)
 
 
+instance Applicative (Standard s) where
+  pure a = Std (\inp -> [(inp,a)])
+  (<*>)  = ap
+
+
 instance Monad (Standard s) where
-  return a    = Std (\inp -> [(inp,a)])
+  return      = pure
   Std p >>= k = Std (\inp -> concat [ q inp' |
                                       (inp', a) <- p inp,
                                       let Std q = k a ])
@@ -58,7 +63,7 @@ instance Functor (Standard s) where
 
 instance Sequence (Standard s)
 {--
-  Std p <*> Std q = Std (\inp -> [ (inp'', f a) | (inp', f) <- p inp, (inp'', a) <- q inp' ])
+  Std p </> Std q = Std (\inp -> [ (inp'', f a) | (inp', f) <- p inp, (inp'', a) <- q inp' ])
 --}
 
 

@@ -23,7 +23,12 @@
 module PureFP.Parsers.PairTrie (PairTrie, ParserTrie) where
 
 import PureFP.OrdMap
+
 import PureFP.Parsers.Parser
+
+import Control.Applicative
+
+import Control.Monad
 
 
 --------------------------------------------------
@@ -32,37 +37,42 @@ import PureFP.Parsers.Parser
 data PairTrie m s a = ParserTrie s (m a) :&: m a
 
 
-makeParser :: (Ord s, Monoid m, Lookahead m s) => ParserTrie s (m a) -> m a
+makeParser :: (Ord s, Monoid' m, Lookahead m s) => ParserTrie s (m a) -> m a
 makeParser ptrie = lookahead (anyof . parseFull ptrie)
 
 
-instance (Ord s, Monoid m, Lookahead m s) => Monoid (PairTrie m s) where
+instance (Ord s, Monoid' m, Lookahead m s) => Monoid' (PairTrie m s) where
   zero                            = zero :&: zero
 
   (ptrie :&: _) <+> (qtrie :&: _) = pqtrie :&: makeParser pqtrie
     where pqtrie                  = ptrie <+> qtrie
 
 
-instance (Ord s, Monad m) => Monad (PairTrie m s) where
-  return a  = (p ::: zero) :&: p
-    where p = return a
+instance (Ord s, Monad m, Applicative m) => Applicative (PairTrie m s) where
+  pure a = (p ::: zero) :&: p
+    where p = pure a
+  (<*>)  = ap
 
-  (>>=)     = error "PairTrie: (>>=) is not implemented"
+
+instance (Ord s, Monad m, Applicative m) => Monad (PairTrie m s) where
+  return = pure
+
+  (>>=)  = error "PairTrie: (>>=) is not implemented"
 
 
 instance (Ord s, Functor m) => Functor (PairTrie m s) where
   fmap f (trie :&: p) = fmap (fmap f) trie :&: fmap f p
 
 
-instance (Ord s, Monoid m, Sequence m, Lookahead m s) => Sequence (PairTrie m s) where
-  (ptrie :&: _) <*> ~(qtrie :&: q) = pqtrie :&: makeParser pqtrie
+instance (Ord s, Monoid' m, Sequence m, Applicative m, Lookahead m s) => Sequence (PairTrie m s) where
+  (ptrie :&: _) </> ~(qtrie :&: q) = pqtrie :&: makeParser pqtrie
     where pqtrie                   = mapPQ ptrie
           mapPQ (Shift pmap')      = Shift (mapMap mapPQ pmap')
-          mapPQ (p' ::: ptrie')    = mapPQ ptrie' <+> fmap (p'<*>) qtrie
-          mapPQ (Found p' ptrie')  = Found (p' <*> q) (mapPQ ptrie')
+          mapPQ (p' ::: ptrie')    = mapPQ ptrie' <+> fmap (p' </>) qtrie
+          mapPQ (Found p' ptrie')  = Found (p' </> q) (mapPQ ptrie')
 
 
-instance (InputSymbol s, Monoid m, Symbol m s, Lookahead m s) => Symbol (PairTrie m s) s where
+instance (InputSymbol s, Monoid' m, Symbol m s, Lookahead m s) => Symbol (PairTrie m s) s where
   sym s         = Found p ptrie :&: p
     where p     = sym s
           ptrie = Shift (s |-> Found skip (skip ::: zero))
@@ -82,7 +92,7 @@ data ParserTrie s a = Shift (Map s (ParserTrie s a))  |
                       a ::: ParserTrie s a            |
                       Found a (ParserTrie s a)
 
-instance Ord s => Monoid (ParserTrie s) where
+instance Ord s => Monoid' (ParserTrie s) where
   zero                            = Shift emptyMap
 
   Found p ptrie <+> qtrie         = ptrie <+> qtrie

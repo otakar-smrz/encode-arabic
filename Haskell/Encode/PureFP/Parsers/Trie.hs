@@ -23,14 +23,19 @@
 module PureFP.Parsers.Trie (Trie) where
 
 import PureFP.OrdMap
+
 import PureFP.Parsers.Parser
+
+import Control.Applicative
+
+import Control.Monad
 
 
 data Trie s a = Shift (Map s (Trie s a))  |
                 a ::: Trie s a
 
 
-instance Ord s => Monoid (Trie s) where
+instance Ord s => Monoid' (Trie s) where
   zero                      = Shift emptyMap
 
   (a ::: p)  <+> q          = a ::: (p <+> q)
@@ -38,8 +43,12 @@ instance Ord s => Monoid (Trie s) where
   Shift pmap <+> Shift qmap = Shift (mergeWith (<+>) pmap qmap)
 
 
+instance Ord s => Applicative (Trie s) where
+  pure a = a ::: zero
+  (<*>)  = ap
+
 instance Ord s => Monad (Trie s) where
-  return a         = a ::: zero
+  return           = pure
 
   (a ::: p)  >>= k = k a <+> (p >>= k)
   Shift pmap >>= k = Shift (mapMap (>>=k) pmap)
@@ -75,7 +84,3 @@ instance Ord s => Parser (Trie s) s where
   parseFull (Shift pmap) (s:inp) = case pmap ? s of
                                      Just p  -> parseFull p inp
                                      Nothing -> []
-
-
-
-
