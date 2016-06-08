@@ -4,7 +4,7 @@
 
 package Encode::Arabic;
 
-our $VERSION = '14.2';
+our $VERSION = '14.3';
 
 use 5.008;
 
@@ -221,13 +221,13 @@ of the listed encodings.
 
 =head1 SEE ALSO
 
-Encode::Arabic Online Interface L<http://encode-arabic.sourceforge.net/>
+Encode::Arabic Online Interface L<http://encode-arabic.sf.net/>
 
-Encode Arabic Project           L<http://sourceforge.net/projects/encode-arabic/>
+Encode Arabic Project           L<http://github.com/otakar-smrz/encode-arabic/>
 
-ElixirFM Online Interface       L<http://elixir-fm.sourceforge.net/>
+ElixirFM Online Interface       L<http://elixir-fm.sf.net/>
 
-ElixirFM Project                L<http://sourceforge.net/projects/elixir-fm/>
+ElixirFM Project                L<http://github.com/otakar-smrz/elixir-fm/>
 
 L<Encode|Encode>,
 L<Encode::Encoding|Encode::Encoding>,

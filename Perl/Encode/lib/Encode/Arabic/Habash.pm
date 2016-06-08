@@ -4,7 +4,7 @@
 
 package Encode::Arabic::Habash;
 
-our $VERSION = '14.1';
+our $VERSION = '14.3';
 
 use 5.008;
 
