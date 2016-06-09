@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name='Encode.Arabic',
-    version='1.3.8',
+    version='1.3.9',
     description='Encode Arabic',
     long_description='https://github.com/otakar-smrz/encode-arabic',
     url='https://github.com/otakar-smrz/encode-arabic',

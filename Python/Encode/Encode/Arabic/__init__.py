@@ -2,7 +2,7 @@
 
 """Encode Arabic"""
 
-__version__   = "1.3.8"
+__version__   = "1.3.9"
 __license__   = "GPL"
 __copyright__ = "2016"
 __author__    = "Otakar Smrz"
