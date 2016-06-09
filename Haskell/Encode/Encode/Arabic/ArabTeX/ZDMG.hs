@@ -593,6 +593,12 @@ ruleHyphenedVowel =
 ruleInternalTaaaa =
 
         anyof [
+                    "H" ++ v        |-|     "H"             |:| []
+
+                |   v <- elems [vowel] ++ quote [vowel, sukun] ]
+
+        |+| anyof [
+
                     "T" ++ v ++ c   |-|     "t" ++ v ++ c   |:| []  |+|
                     "H" ++ v ++ c   |-|     "t" ++ v ++ c   |:| []
 
