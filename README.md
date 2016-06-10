@@ -11,6 +11,8 @@ Encode Arabic
 New things
 ----------
 
+- Encode Arabic now uses [Jupyter](http://jupyter.org) to provide example-driven insights and documentation. Check out the [IHaskell](http://github.com/otakar-smrz/encode-arabic/tree/master/Haskell/Encode/README.ipynb) and [IPython](http://github.com/otakar-smrz/encode-arabic/tree/master/Python/Encode/README.ipynb) notebooks!
+
 - The project includes the recently updated [LaTeX](http://github.com/otakar-smrz/encode-arabic/tree/master/LaTeX) packages [acolor](http://github.com/otakar-smrz/encode-arabic/tree/master/LaTeX/acolor) and [alocal](http://github.com/otakar-smrz/encode-arabic/tree/master/LaTeX/alocal) for fancy coloring of the Arabic script and extending the virtues of the ArabTeX notation.
 
 - The [Haskell](http://github.com/otakar-smrz/encode-arabic/tree/master/Haskell/Encode) library has fixed the typesetting of wasla and quoting of vowels in the [phonological transcription](http://github.com/otakar-smrz/encode-arabic/blob/master/Haskell/Encode/Encode/Arabic/ArabTeX/ZDMG.hs).
