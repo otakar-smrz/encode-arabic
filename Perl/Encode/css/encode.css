@@ -1,3 +1,6 @@
+@import url(http://openfontlibrary.org/face/droid-arabic-naskh);
+@import url(http://openfontlibrary.org/face/droid-arabic-kufi);
+
 body {
     font-family: DejaVu Sans Condensed, DejaVu Sans, Arial Unicode MS, Tahoma, Verdana, Arial, Helvetica, sans-serif;
     font-weight: normal;
@@ -10,6 +13,10 @@ td {
     font-size: medium;
     font-weight: normal;
     text-decoration: none;
+}
+
+input[type="text"] {
+    font-family: Droid Arabic Naskh, DejaVu Sans Condensed, DejaVu Sans, Arial Unicode MS, Tahoma, Verdana, Arial, Helvetica, sans-serif;
 }
 
 input {
@@ -42,6 +49,7 @@ h3 {
 }
 
 p.arabic {
+    font-family: Droid Arabic Naskh, DejaVu Sans Condensed, DejaVu Sans, Arial Unicode MS, Tahoma, Verdana, Arial, Helvetica, sans-serif;
     direction: rtl;
 }
 

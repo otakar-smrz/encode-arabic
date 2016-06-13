@@ -4,7 +4,7 @@
 
 package Encode::Arabic::CGI;
 
-our $VERSION = '14.1';
+our $VERSION = '14.3';
 
 use strict;
 
@@ -121,6 +121,12 @@ sub display_headline ($) {
     my $q = $c->query();
     my $r;
 
+    $r .= $q->a({'href' => 'http://sourceforge.net/projects/encode-arabic/'},
+                $q->img({-border => '0',
+                         -src => 'http://quest.ms.mff.cuni.cz/encode/encode.png',
+                         -alt => 'Encode Arabic',
+                         -style => 'background-color: #FFFFFF; float: left; margin: 0px 8px 0px 0px; height: 50px'}));
+
     $r .= $q->h1($q->a({'href' => 'http://sourceforge.net/projects/encode-arabic/'}, "Encode Arabic"), 'Online Interface');
 
     return $r;
@@ -135,10 +141,13 @@ sub display_welcome ($) {
     $r .= $q->p("Welcome to the online interface to", $q->a({-href => 'http://sourceforge.net/projects/encode-arabic/'}, "Encode Arabic") .
                 ", a library for processing various encodings and notations of Arabic with",
                 $q->a({-href => 'http://search.cpan.org/dist/Encode-Arabic/'}, "Perl"), "or",
-                $q->a({-href => 'http://hackage.haskell.org/cgi-bin/hackage-scripts/package/Encode/'}, "Haskell") . ".");
+                $q->a({-href => 'http://hackage.haskell.org/package/Encode/'}, "Haskell") . ".");
 
-    $r .= $q->p('You must have Unicode fonts installed to appreciate this site. If you need some, try the',
-                $q->a({'href' => 'http://sourceforge.net/projects/dejavu/'}, 'DejaVu Fonts'), 'from SourceForge.');
+    $r .= $q->p("Encode Arabic is further documented at", $q->a({-href => 'http://github.com/otakar-smrz/encode-arabic/'},
+                "GitHub") . ".",
+                "The multiple scripts of this site are best viewed with",
+                $q->a({-href => 'http://openfontlibrary.org/en/font/droid-arabic-naskh'}, "Droid Arabic Naskh"), "and",
+                $q->a({-href => 'http://sourceforge.net/projects/dejavu/'}, "DejaVu"), "fonts.");
 
     return $r;
 }
@@ -151,7 +160,7 @@ sub display_footline ($) {
 
     $r .= $q->br();
 
-    $r .= $q->p("(C) Otakar Smr\x{017E} 2012-2003. GNU General Public License", $q->a({-href => 'http://www.gnu.org/licenses/'}, "GNU GPL 3") . ".");
+    $r .= $q->p("(C) Otakar Smr\x{017E} 2016-2003. GNU General Public License", $q->a({-href => 'http://www.gnu.org/licenses/'}, "GNU GPL 3") . ".");
 
     $r .= $q->p("Encode Arabic is an", $q->a({-href => 'http://sourceforge.net/projects/encode-arabic/'}, "open-source online"), "project.",
                 "You can contribute to its development with your suggestions!");
