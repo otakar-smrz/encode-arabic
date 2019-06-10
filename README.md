@@ -20,4 +20,4 @@
 
 ## Join us
 
-Since [Encode Arabic](http://github.com/otakar-smrz/encode-arabic) is now hosted on [GitHub](http://github.com/otakar-smrz) and [Bitbucket](http://bitbucket.org/otakar-smrz), it becomes yet easier to join the project and contribute to it. We do need new features, applications, as well as documentation. Feel free to contact us or clone the project!
+Since [Encode Arabic](http://github.com/otakar-smrz/encode-arabic) is now hosted on [GitHub](http://github.com/otakar-smrz), it becomes yet easier to join the project and contribute to it. We do need new features, applications, as well as documentation. Feel free to contact us or clone the project!
