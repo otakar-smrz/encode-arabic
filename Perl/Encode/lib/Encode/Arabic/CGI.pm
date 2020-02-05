@@ -264,7 +264,7 @@ sub recode {
                        [
                         td({-colspan => 3},
                            [$q->textfield(-name       =>  'text',
-                                          -default    =>  $q->param('text'),
+                                          -default    =>  scalar $q->param('text'),
                                           -size       =>  120,
                                           -maxlength  =>  200,
                             )]),
@@ -278,13 +278,13 @@ sub recode {
                                         [$q->radio_group(-name      =>  'decode',
                                                          -onchange  =>  "encodeYamli('text')",
                                                          -values    =>  [@dec_list],
-                                                         -default   =>  [$q->param('decode')]),
+                                                         -default   =>  scalar $q->param('decode')),
                                         ]),
                                      td({-align => 'left'}, 'Encode Setting') .
                                      td({-align => 'center'},
                                         [$q->checkbox_group(-name      =>  'encode',
                                                             -values    =>  [@enc_list],
-                                                            -default   =>  [$q->param('encode')]),
+                                                            -default   =>  [$q->multi_param('encode')]),
                                         ]),
                                     ])
                            )),
@@ -296,14 +296,14 @@ sub recode {
                        td({-align => 'right'},  $q->submit(-name => 'submit', -value => 'Example')),
                     ));
 
-    $r .= $q->hidden( -name => $c->mode_param(), -value => $q->param($c->mode_param()) );
+    $r .= $q->hidden( -name => $c->mode_param(), -value => scalar $q->param($c->mode_param()) );
 
     $r .= $q->end_form();
 
 
     $r .= $q->h2('Decode');
 
-    $r .= $q->h3($q->a({'href' => $url_hash{$q->param('decode')}}, $q->param('decode')));
+    $r .= $q->h3($q->a({'href' => $url_hash{$q->param('decode')}}, scalar $q->param('decode')));
 
     $r .= $q->p({'class' => $q->param('text') =~ /\p{Arabic}/ ? 'arabic' : ''}, $q->param('text') ne '' ? escape $q->param('text') : '&nbsp;');
 
@@ -312,7 +312,7 @@ sub recode {
 
     $r .= $q->h2('Encode');
 
-    foreach ($q->param('encode')) {
+    foreach ($q->multi_param('encode')) {
 
         $r .= $q->h3($q->a({'href' => $url_hash{$_}}, $_));
 
